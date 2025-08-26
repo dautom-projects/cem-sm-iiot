@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Configuración Cliente OPC UA en Ignition :: CEMPRO Docs</title>
+    <meta name="generator" content="Antora 3.1.12">
+    <link rel="stylesheet" href="./_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href=".">
+        <img src="./_/img/logo.png" alt="Logo" class="navbar-logo" style="height: 44px; margin-right: 8px; vertical-align: middle;">
+        CEMPRO Docs
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Cempro</a></h3>
+<ul class="nav-list">
+  <li class="nav-item has-children" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item has-children" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Plataforma de datos IoT San Miguel</a>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="opc.html">Ignition como Cliente OPC UA</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ignition_mqtt.html">Modulo MQTT Transmission (Cirrus Link)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ibsnow.html">IoT Bridge for Snowflake (Cirrus Link)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="uns.html">Modelado UNS</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Cempro</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Cempro</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Cempro</a></li>
+    <li><a href="index.html">Plataforma de datos IoT San Miguel</a></li>
+    <li><a href="opc.html">Ignition como Cliente OPC UA</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///D:/Users/rugel/Documents/CEM/cem-sm-iiot/modules/ROOT/pages/opc.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Configuración Cliente OPC UA en Ignition</h1>
+<div class="sect1">
+<h2 id="_acceso_al_módulo_opc_ua"><a class="anchor" href="#_acceso_al_módulo_opc_ua"></a>Acceso al Módulo OPC UA</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ingresar a la interfaz web de Ignition Gateway en el navegador: <code><a href="http://&lt;ip-del-host&gt;:8088" class="bare">http://&lt;ip-del-host&gt;:8088</a></code> (ejemplo: <code><a href="http://localhost:8088" class="bare">http://localhost:8088</a></code>)</p>
+</li>
+<li>
+<p>Navegar a <strong>Config → OPC Client</strong> (buscar en panel azul) → <strong>OPC Connections</strong></p>
+</li>
+<li>
+<p>Hacer clic en <strong>Create new OPC Connection</strong></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuración_de_conexión"><a class="anchor" href="#_configuración_de_conexión"></a>Configuración de Conexión</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Tipo de conexión</strong>: Seleccionar <strong>OPC UA Connection</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>Nombre de conexión</strong>: Definir identificador según estándar de nomenclatura interna (ejemplo: <code>Siemens_Calera</code>)</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parámetros_del_servidor"><a class="anchor" href="#_parámetros_del_servidor"></a>Parámetros del Servidor</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>En la mayoría de los casos basta con configurar únicamente el <strong>Discovery URL</strong>, ya que Ignition detecta automáticamente el Endpoint y otros parámetros.
+Sin embargo,es posible acceder a configuraciones avanzadas (p. ej., resolución de nombre de host o definición de seguridad). En ese caso, se pueden completar los siguientes campos:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 33.3333%;">
+<col style="width: 50.0001%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parámetro</th>
+<th class="tableblock halign-left valign-top">Valor Configurado</th>
+<th class="tableblock halign-left valign-top">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Discovery URL</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>opc.tcp://10.80.2.70:4862/discovery</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Dirección principal de descubrimiento. Ignition obtiene automáticamente los Endpoints disponibles a partir de este valor.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Endpoint URL</strong> <em>(automático)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>opc.tcp://CLIENTE3:4862</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Se completa automáticamente al conectarse al servidor. Indica el Endpoint utilizado.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Endpoint Host Override</strong> <em>(opcional)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10.80.2.70</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permite forzar la IP real del servidor si el nombre (CLIENTE3) no se resuelve correctamente en DNS.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Security Mode</strong> <em>(opcional)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>None</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Define si se aplica firma o cifrado de mensajes. Requiere que coincida con la configuración del servidor.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Security Policy</strong> <em>(opcional)</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>None</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Especifica la política criptográfica. Debe coincidir con la ofrecida por el servidor.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>La política de seguridad y el modo de conexión deben concordar con el servidor OPC del PLC para garantizar compatibilidad.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conexión_y_validación"><a class="anchor" href="#_conexión_y_validación"></a>Conexión y Validación</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Guardar los cambios</strong> haciendo clic en el botón correspondiente</p>
+</li>
+<li>
+<p><strong>Verificar estado de conexión</strong>: El estado debe mostrar <strong>Connected</strong></p>
+</li>
+<li>
+<p><strong>Revisar certificados</strong>: En <strong>Status → OPC Connections</strong> verificar que no existan errores de certificado</p>
+</li>
+<li>
+<p><strong>Gestión de certificados</strong>: Si hay seguridad en la conexión, ya sea encriptado o con llaves, aceptar el certificado del servidor OPC UA desde <strong>Config → Security → OPC Client Security</strong></p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Típicamente, el certificado se genera automáticamente por el servidor. Algunos errores de conexión pueden derivarse de la ausencia de certificado o no haberlo aceptado.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_verificación_con_opc_browser"><a class="anchor" href="#_verificación_con_opc_browser"></a>Verificación con OPC Browser</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Utilizar el <strong>OPC Browser</strong> integrado en Ignition para:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navegar por la estructura de tags del servidor OPC UA</p>
+</li>
+<li>
+<p>Identificar el path base para las variables de interés</p>
+</li>
+<li>
+<p>Realizar pruebas de lectura de valores</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>El OPC Browser es una herramienta accesible desde el Ignition Designer, dando click al Icono + en la barra superior del Tag Browser y seleccionando "Browse Devices".</p>
+</div>
+<div class="paragraph">
+<p><strong>Ejemplo de path identificado</strong>: <code>ns=1;s=t|WINCC_CALERA_HORNOS_SRVCAL01::</code></p>
+</div>
+<div class="imageblock text-center unresolved">
+<div class="content">
+<img src="cempro/OPC_browser.png" alt="OPC Browser" width="620">
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_modelado_de_tags_en_tag_provider"><a class="anchor" href="#_modelado_de_tags_en_tag_provider"></a>Modelado de Tags en Tag Provider</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Una vez establecida la conexión OPC UA:</p>
+</div>
+<div class="sect2">
+<h3 id="_definición_de_udts_user_defined_types"><a class="anchor" href="#_definición_de_udts_user_defined_types"></a>Definición de UDTs (User Defined Types)</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Crear UDTs según la estructura de la VMT (Variable Master Table)</p>
+</li>
+<li>
+<p>Parametrizar el servidor OPC y el path base en cada UDT</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Parámetros de UDT</strong>:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parámetro</th>
+<th class="tableblock halign-left valign-top">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>OPC</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Siemens_Calera</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ns=1;s=t|WINCC_CALERA_HORNOS_SRVCAL01::</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_creación_de_instancias_en_tag_provider"><a class="anchor" href="#_creación_de_instancias_en_tag_provider"></a>Creación de Instancias en Tag Provider</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Crear instancias de UDTs en el Tag Provider <strong>CEM_UNS</strong></p>
+</li>
+<li>
+<p>Seguir la estructura jerárquica ISA-95:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cempro</strong> (Enterprise)</p>
+</li>
+<li>
+<p><strong>San Miguel</strong> (Site)</p>
+</li>
+<li>
+<p><strong>Calera</strong> (Area)</p>
+</li>
+<li>
+<p><strong>Equipos específicos</strong> (Work Units)</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center unresolved">
+<div class="content">
+<img src="cempro/Estructura_tags.png" alt="Estructura de Tags" width="600">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_validación_de_datos"><a class="anchor" href="#_validación_de_datos"></a>Validación de Datos</h3>
+<div class="paragraph">
+<p>Verificar en el <strong>Tag Browser</strong> que:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Los tags muestren valores actualizados</p>
+</li>
+<li>
+<p>No hay errores de calidad (Consultar troubleshooting).</p>
+</li>
+<li>
+<p>Los timestamps se actualizan correctamente</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="./_/js/site.js" data-ui-root-path="./_"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+  </body>
+  <script src="./_/js/vendor/lunr.min.js"></script> 
+
+<script src="./_/js/vendor/lunr.stemmer.support.js"></script> 
+
+<script src="./_/js/vendor/lunr.es.js"></script> 
+
+<script src="./_/js/07-search.js"></script> 
+
+ 
+
+ 
+</html>
