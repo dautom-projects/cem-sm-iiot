@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Diagnóstico de Conexiones OPC UA :: CEMPRO Docs</title>
+    <meta name="generator" content="Antora 3.1.12">
+    <link rel="stylesheet" href="./_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href=".">
+        <img src="./_/img/logo.png" alt="Logo" class="navbar-logo" style="height: 44px; margin-right: 8px; vertical-align: middle;">
+        CEMPRO Docs
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Cempro</a></h3>
+<ul class="nav-list">
+  <li class="nav-item has-children" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item has-children" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Plataforma de datos IoT San Miguel</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="opc.html">Ignition como Cliente OPC UA</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ignition_mqtt.html">Modulo MQTT Transmission (Cirrus Link)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ibsnow.html">IoT Bridge for Snowflake (Cirrus Link)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="uns.html">Modelado UNS</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Cempro</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Cempro</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Cempro</a></li>
+    <li><a href="index.html">Plataforma de datos IoT San Miguel</a></li>
+    <li><a href="troubleshooting.html">Troubleshooting</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///D:/Users/rugel/Documents/CEM/cem-sm-iiot/modules/ROOT/pages/troubleshooting.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Diagnóstico de Conexiones OPC UA</h1>
+<div class="sect1">
+<h2 id="_síntomas_comunes"><a class="anchor" href="#_síntomas_comunes"></a>Síntomas Comunes</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_estado_de_conexión_faulted_o_disconnected"><a class="anchor" href="#_estado_de_conexión_faulted_o_disconnected"></a>Estado de Conexión Faulted o Disconnected</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>El estado en <strong>Config → OPC Client → OPC Connections</strong> muestra <strong>Faulted</strong> o <strong>Disconnected</strong></p>
+</li>
+<li>
+<p>La conexión no se establece al guardar la configuración</p>
+</li>
+<li>
+<p>Pérdida intermitente de conexión con el servidor OPC UA</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tags_en_estado_bad_stale"><a class="anchor" href="#_tags_en_estado_bad_stale"></a>Tags en Estado Bad_Stale</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Los tags no muestran valores actualizados en el Tag Browser</p>
+</li>
+<li>
+<p>Los valores permanecen congelados en el último estado conocido</p>
+</li>
+<li>
+<p>Indicadores de calidad muestran errores de comunicación</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_errores_de_certificado"><a class="anchor" href="#_errores_de_certificado"></a>Errores de Certificado</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Mensajes de error relacionados con certificados SSL/TLS</p>
+</li>
+<li>
+<p>Fallos de autenticación al establecer la conexión</p>
+</li>
+<li>
+<p>Rechazos de certificado del servidor OPC UA</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_causas_probables_y_acciones_de_diagnóstico"><a class="anchor" href="#_causas_probables_y_acciones_de_diagnóstico"></a>Causas Probables y Acciones de Diagnóstico</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_problemas_de_conectividad_de_red"><a class="anchor" href="#_problemas_de_conectividad_de_red"></a>Problemas de Conectividad de Red</h3>
+<div class="paragraph">
+<p><strong>Verificar conectividad básica:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">ping &lt;IP_SERVIDOR_OPC&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Si el ping falla:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Revisar configuración de red del servidor Ignition</p>
+</li>
+<li>
+<p>Verificar conectividad física entre Ignition y PLC</p>
+</li>
+<li>
+<p>Confirmar que no hay firewalls bloqueando el tráfico</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Si el ping funciona pero OPC UA falla:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Verificar que el puerto OPC UA esté abierto (típicamente 4840, 4862)</p>
+</li>
+<li>
+<p>Confirmar que el servicio OPC UA esté ejecutándose en el PLC</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuración_de_endpoint_incorrecta"><a class="anchor" href="#_configuración_de_endpoint_incorrecta"></a>Configuración de Endpoint Incorrecta</h3>
+<div class="paragraph">
+<p><strong>Revisar parámetros de conexión:</strong></p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parámetro</th>
+<th class="tableblock halign-left valign-top">Verificación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Discovery URL</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Debe coincidir con la configuración del servidor</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Endpoint URL</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Verificar IP, puerto y formato correcto</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Endpoint Host Override</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usar cuando el nombre no resuelve correctamente</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Procedimiento de verificación:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Acceder a <strong>Config → OPC Client → OPC Connections</strong></p>
+</li>
+<li>
+<p>Editar la conexión problemática</p>
+</li>
+<li>
+<p>Verificar que el <strong>Endpoint URL</strong> coincida exactamente con la configuración del servidor</p>
+</li>
+<li>
+<p>Si se usa nombre de host, confirmar resolución DNS o configurar <strong>Host Override</strong></p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_problemas_de_seguridad_y_certificados"><a class="anchor" href="#_problemas_de_seguridad_y_certificados"></a>Problemas de Seguridad y Certificados</h3>
+<div class="paragraph">
+<p><strong>Configuración de Security Mode y Policy:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Verificar que <strong>Security Mode</strong> y <strong>Security Policy</strong> coincidan entre cliente y servidor</p>
+</li>
+<li>
+<p>Para troubleshooting inicial, usar <strong>Security Mode: None</strong> y <strong>Security Policy: None</strong></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Gestión de certificados:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navegar a <strong>Config → Security → OPC Client Security</strong></p>
+</li>
+<li>
+<p>Verificar que el certificado del servidor esté en la lista <strong>Trusted</strong></p>
+</li>
+<li>
+<p>Si el certificado no aparece, intentar conexión para generarlo automáticamente</p>
+</li>
+<li>
+<p>Aceptar manualmente el certificado si es requerido</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_análisis_de_logs_específicos"><a class="anchor" href="#_análisis_de_logs_específicos"></a>Análisis de Logs Específicos</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_configurar_filtrado_de_logs"><a class="anchor" href="#_configurar_filtrado_de_logs"></a>Configurar Filtrado de Logs</h3>
+<div class="paragraph">
+<p><strong>Acceder a logs OPC UA:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Ir a <strong>Status → Diagnostics → Logs</strong></p>
+</li>
+<li>
+<p>En el filtro, buscar por logger name: <code>opcua</code> o <code>OPC</code></p>
+</li>
+<li>
+<p>Configurar <strong>Min Level</strong> a <strong>Debug</strong> para máximo detalle</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Loggers relevantes para OPC UA:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>com.inductiveautomation.opcua</code></p>
+</li>
+<li>
+<p><code>UaClientMessageHandler</code></p>
+</li>
+<li>
+<p><code>OPCConnection</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_interpretación_de_mensajes_de_error_comunes"><a class="anchor" href="#_interpretación_de_mensajes_de_error_comunes"></a>Interpretación de Mensajes de Error Comunes</h3>
+<div class="paragraph">
+<p><strong>Error: "Connection reset"</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Logger: UaClientMessageHandler
+Message: Exception caught: Connection reset</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Causa:</strong> Pérdida de conectividad de red</p>
+</div>
+<div class="paragraph">
+<p><strong>Acción:</strong> Verificar estabilidad de red y configuración de Keep Alive</p>
+</div>
+<div class="paragraph">
+<p><strong>Error: "Certificate not trusted"</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Logger: opcua.client
+Message: Certificate validation failed: Certificate not trusted</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Causa:</strong> Certificado del servidor no está en lista de confianza</p>
+</div>
+<div class="paragraph">
+<p><strong>Acción:</strong> Aceptar certificado en <strong>Config → Security → OPC Client Security</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>Error: "Connection refused"</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Logger: OPCConnection
+Message: Connection refused to endpoint</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Causa:</strong> Servidor OPC UA no disponible o puerto incorrecto</p>
+</div>
+<div class="paragraph">
+<p><strong>Acción:</strong> Verificar que el servicio OPC UA esté ejecutándose y el puerto sea correcto</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configuración_avanzada_de_logging"><a class="anchor" href="#_configuración_avanzada_de_logging"></a>Configuración Avanzada de Logging</h3>
+<div class="paragraph">
+<p><strong>Para diagnóstico detallado:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>En <strong>Status → Diagnostics → Logs</strong>, hacer clic en <strong>Settings</strong></p>
+</li>
+<li>
+<p>Buscar logger <code>com.inductiveautomation.opcua</code></p>
+</li>
+<li>
+<p>Cambiar nivel a <strong>DEBUG</strong></p>
+</li>
+<li>
+<p>Aplicar cambios y reproducir el problema</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Información adicional en modo DEBUG:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Detalles de handshake SSL/TLS</p>
+</li>
+<li>
+<p>Intercambio de certificados</p>
+</li>
+<li>
+<p>Parámetros de sesión OPC UA</p>
+</li>
+<li>
+<p>Timing de reconexiones</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_procedimientos_de_resolución"><a class="anchor" href="#_procedimientos_de_resolución"></a>Procedimientos de Resolución</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_si_la_conexión_muestra_faulted"><a class="anchor" href="#_si_la_conexión_muestra_faulted"></a>Si la conexión muestra "Faulted"</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Verificar configuración básica:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Endpoint URL correcto</p>
+</li>
+<li>
+<p>Credenciales válidas (si aplica)</p>
+</li>
+<li>
+<p>Security settings coincidentes</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Probar conectividad:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ping al servidor OPC UA</p>
+</li>
+<li>
+<p>Telnet al puerto OPC UA: <code>telnet &lt;IP&gt; &lt;PUERTO&gt;</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Revisar certificados:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Verificar en <strong>OPC Client Security</strong></p>
+</li>
+<li>
+<p>Regenerar certificados si es necesario</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Analizar logs:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Activar DEBUG logging</p>
+</li>
+<li>
+<p>Buscar mensajes específicos de error</p>
+</li>
+<li>
+<p>Correlacionar timestamps con eventos</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_si_los_tags_muestran_bad_stale"><a class="anchor" href="#_si_los_tags_muestran_bad_stale"></a>Si los tags muestran Bad_Stale</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Verificar estructura de tags:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Confirmar que los paths OPC UA sean correctos</p>
+</li>
+<li>
+<p>Validar que las variables existan en el servidor</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Revisar configuración de suscripciones:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Verificar <strong>Subscription Rate</strong> en la conexión OPC UA</p>
+</li>
+<li>
+<p>Confirmar que no hay sobrecarga del servidor</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Depurar tags específicos:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Usar <strong>OPC Browser</strong> para navegar la estructura</p>
+</li>
+<li>
+<p>Probar lectura manual de variables problemáticas</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_si_hay_errores_de_certificado_recurrentes"><a class="anchor" href="#_si_hay_errores_de_certificado_recurrentes"></a>Si hay errores de certificado recurrentes</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Limpiar certificados existentes:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Eliminar certificados problemáticos de <strong>Trusted</strong></p>
+</li>
+<li>
+<p>Permitir regeneración automática</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Configurar políticas de seguridad:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Coordinar con administrador del PLC</p>
+</li>
+<li>
+<p>Definir política común entre cliente y servidor</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Verificar configuración de tiempo:</strong></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Sincronizar relojes entre Ignition y PLC</p>
+</li>
+<li>
+<p>Los certificados son sensibles a diferencias de tiempo</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_herramientas_de_diagnóstico_adicionales"><a class="anchor" href="#_herramientas_de_diagnóstico_adicionales"></a>Herramientas de Diagnóstico Adicionales</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_ua_expert_cliente_opc_ua_externo"><a class="anchor" href="#_ua_expert_cliente_opc_ua_externo"></a>UA Expert (Cliente OPC UA externo)</h3>
+<div class="paragraph">
+<p>Utilizar UA Expert para verificar conectividad independiente de Ignition:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configurar conexión con los mismos parámetros que Ignition</p>
+</li>
+<li>
+<p>Verificar que la conexión se establezca correctamente</p>
+</li>
+<li>
+<p>Navegar la estructura de variables disponibles</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Si UA Expert funciona pero Ignition no:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Comparar configuraciones detalladamente</p>
+</li>
+<li>
+<p>Verificar versiones de certificados</p>
+</li>
+<li>
+<p>Revisar configuraciones específicas de Ignition</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_herramientas_de_red"><a class="anchor" href="#_herramientas_de_red"></a>Herramientas de Red</h3>
+<div class="paragraph">
+<p><strong>Comandos de terminal/PowerShell:</strong></p>
+</div>
+<div class="paragraph">
+<p>Desde la línea de comandos es posible utilizar herramientas estándar para verificar conectividad de red, probar puertos específicos y diagnosticar problemas de comunicación.</p>
+</div>
+<div class="paragraph">
+<p><strong>Análisis de tráfico:</strong></p>
+</div>
+<div class="paragraph">
+<p>Existen herramientas especializadas para captura y análisis de tráfico de red que permiten examinar la comunicación OPC UA a nivel de protocolo, útiles para diagnosticar problemas complejos de conectividad.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuración_de_logging"><a class="anchor" href="#_configuración_de_logging"></a>Configuración de Logging</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><strong>Configuración recomendada de niveles:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Loggers relacionados con OPC UA pueden configurarse en diferentes niveles (DEBUG, INFO, WARN, ERROR)</p>
+</li>
+<li>
+<p>Para operación normal se recomienda nivel INFO o WARN</p>
+</li>
+<li>
+<p>Para troubleshooting detallado activar nivel DEBUG temporalmente</p>
+</li>
+<li>
+<p>Evitar DEBUG permanente en producción para no impactar rendimiento</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="./_/js/site.js" data-ui-root-path="./_"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+  </body>
+  <script src="./_/js/vendor/lunr.min.js"></script> 
+
+<script src="./_/js/vendor/lunr.stemmer.support.js"></script> 
+
+<script src="./_/js/vendor/lunr.es.js"></script> 
+
+<script src="./_/js/07-search.js"></script> 
+
+ 
+
+ 
+</html>

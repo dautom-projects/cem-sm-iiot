@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Configuración MQTT Transmission en Ignition :: CEMPRO Docs</title>
+    <meta name="generator" content="Antora 3.1.12">
+    <link rel="stylesheet" href="./_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href=".">
+        <img src="./_/img/logo.png" alt="Logo" class="navbar-logo" style="height: 44px; margin-right: 8px; vertical-align: middle;">
+        CEMPRO Docs
+      </a>
+      <div class="navbar-item search hide-for-print">
+        <div id="search-field" class="field">
+          <input id="search-input" type="text" placeholder="Search the docs">
+        </div>
+      </div>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Cempro</a></h3>
+<ul class="nav-list">
+  <li class="nav-item has-children" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item has-children" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Plataforma de datos IoT San Miguel</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="opc.html">Ignition como Cliente OPC UA</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="ignition_mqtt.html">Modulo MQTT Transmission (Cirrus Link)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ibsnow.html">IoT Bridge for Snowflake (Cirrus Link)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="uns.html">Modelado UNS</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Cempro</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Cempro</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Cempro</a></li>
+    <li><a href="index.html">Plataforma de datos IoT San Miguel</a></li>
+    <li><a href="ignition_mqtt.html">Modulo MQTT Transmission (Cirrus Link)</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///D:/Users/rugel/Documents/CEM/cem-sm-iiot/modules/ROOT/pages/ignition_mqtt.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Configuración MQTT Transmission en Ignition</h1>
+<div class="sect2">
+<h3 id="_acceso_al_módulo"><a class="anchor" href="#_acceso_al_módulo"></a>Acceso al Módulo</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>En Ignition Gateway, navegar a <strong>Config → MQTT Transmission</strong> (buscar en panel azul) → <strong>Settings → Transmitters</strong></p>
+</li>
+<li>
+<p>Crear nuevo Transmitter con los siguientes parámetros:</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configurar_set"><a class="anchor" href="#_configurar_set"></a>Configurar Set</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Un Set es el componente que vincula los transmitters con los servidores MQTT. Actúa como un puente de configuración que determina qué servidor utilizará cada transmitter para publicar sus datos.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>En Ignition Gateway, navegar a Config → MQTT Transmission (buscar en panel azul) → Settings → Sets</p>
+</li>
+<li>
+<p>Agregar nombre del set (ejemplo: <code>UNS</code>)</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_creación_de_mqtt_transmitter"><a class="anchor" href="#_creación_de_mqtt_transmitter"></a>Creación de MQTT Transmitter</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 33.3333%;">
+<col style="width: 50.0001%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parámetro</th>
+<th class="tableblock halign-left valign-top">Valor de Ejemplo</th>
+<th class="tableblock halign-left valign-top">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Nombre</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SMSNOWFLAKETR</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identificador del transmitter</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Enabled</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>False</code> (inicialmente)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mantener deshabilitado durante configuración</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Tag Provider</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CEM_UNS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Provider que contiene los tags a transmitir</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Tag Path</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Cempro/San Miguel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ruta base de los tags a publicar</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Set</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UNS</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Set que vincula transmitter con servidor</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Convert UDT</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Unchecked</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mantener estructura UDT original</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Group ID</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Cempro</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identificador de grupo Sparkplug B</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Edge Node ID</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>San Miguel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identificador de nodo edge</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Group ID y Edge Node ID deben ser únicos por broker según especificación Sparkplug B. No pueden existir dos transmitters con la misma combinación.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuración_de_history_store_store_and_forward"><a class="anchor" href="#_configuración_de_history_store_store_and_forward"></a>Configuración de History Store (Store and Forward)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Para garantizar continuidad de datos ante desconexiones:</p>
+</div>
+<div class="sect2">
+<h3 id="_crear_history_store"><a class="anchor" href="#_crear_history_store"></a>Crear History Store</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navegar a <strong>MQTT Transmission → History Stores</strong></p>
+</li>
+<li>
+<p>Crear nuevo store:</p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parámetro</th>
+<th class="tableblock halign-left valign-top">Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Nombre</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SM In-Disk Store</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Tipo</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Disk</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Tamaño máximo</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Según retención deseada</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_asociar_store_al_transmitter"><a class="anchor" href="#_asociar_store_al_transmitter"></a>Asociar Store al Transmitter</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>En la configuración del Transmitter, asignar el <strong>History Store</strong> creado</p>
+</li>
+<li>
+<p>Esto habilita almacenamiento local cuando hay pérdida de conectividad</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuración_del_servidor_mqtt"><a class="anchor" href="#_configuración_del_servidor_mqtt"></a>Configuración del Servidor MQTT</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_crear_configuración_de_server"><a class="anchor" href="#_crear_configuración_de_server"></a>Crear Configuración de Server</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Navegar a <strong>MQTT Transmission → Servers</strong></p>
+</li>
+<li>
+<p>Crear nuevo servidor MQTT:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center unresolved">
+<div class="content">
+<img src="cempro/Server_settings.png" alt="Configuración del servidor" width="720">
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parámetro</th>
+<th class="tableblock halign-left valign-top">Valor Configurado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Name</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SVIoT</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>URL</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>tcp://10.98.12.42:1883</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Server Set</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UNS</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Username</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sanmiguel.edge.transmission</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Password</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(según credenciales configuradas)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Keep Alive</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>60</code> segundos</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_configuración_tls_si_aplica"><a class="anchor" href="#_configuración_tls_si_aplica"></a>Configuración TLS (si aplica)</h3>
+<div class="paragraph">
+<p>Para conexiones seguras (puerto 8883):</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Cargar certificados en <strong>Config → MQTT Transmission → Servers → Certificates</strong></p>
+</li>
+<li>
+<p>Configurar <strong>SSL/TLS Settings</strong> según requerimientos del broker</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_habilitar_transmitter"><a class="anchor" href="#_habilitar_transmitter"></a>Habilitar Transmitter</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Una vez configurados todos los componentes, habilitar el Transmitter</p>
+</li>
+<li>
+<p>Verificar estado de conexión en <strong>Status → MQTT Transmission</strong></p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_validación_de_funcionamiento"><a class="anchor" href="#_validación_de_funcionamiento"></a>Validación de Funcionamiento</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_verificar_estados"><a class="anchor" href="#_verificar_estados"></a>Verificar Estados</h3>
+<div class="paragraph">
+<p><strong>Estado del Servidor</strong>: En <strong>Status → MQTT Transmission → Servers</strong>, confirmar estado <strong>Connected</strong></p>
+</div>
+<div class="paragraph">
+<p><strong>Estado del Transmitter</strong>: Verificar que esté <strong>Enabled</strong> y sin errores</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_monitoreo_de_publicaciones"><a class="anchor" href="#_monitoreo_de_publicaciones"></a>Monitoreo de Publicaciones</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Verificar logs en <strong>Status → Logs</strong> filtrando por categoría MQTT</p>
+</li>
+<li>
+<p>Confirmar que se están publicando mensajes hacia el broker</p>
+</li>
+<li>
+<p>Utilizar herramientas como MQTT Explorer para monitorear tráfico</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_recomendaciones_para_mqtt"><a class="anchor" href="#_recomendaciones_para_mqtt"></a>Recomendaciones para MQTT</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_monitoreo_con_mqtt_explorer"><a class="anchor" href="#_monitoreo_con_mqtt_explorer"></a>Monitoreo con MQTT Explorer</h3>
+<div class="paragraph">
+<p>MQTT Explorer es una herramienta cliente esencial para diagnóstico y monitoreo de publicaciones MQTT:</p>
+</div>
+<div class="paragraph">
+<p><strong>Instalación y Configuración</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Descargar desde el sitio oficial de MQTT Explorer</p>
+</li>
+<li>
+<p>Configurar conexión al broker usando los mismos parámetros del servidor configurado en Ignition</p>
+</li>
+<li>
+<p>Conectar usando las credenciales <code>sanmiguel.edge.transmission</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Verificación de Topics Sparkplug B</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Los topics siguen el patrón: <code>spBv1.0/Cempro/NDATA/San Miguel</code></p>
+</li>
+<li>
+<p>Validar que aparezcan mensajes NBIRTH al inicio (estructura de datos)</p>
+</li>
+<li>
+<p>Confirmar flujo continuo de mensajes NDATA (datos en tiempo real)</p>
+</li>
+<li>
+<p>Monitorear mensajes NDEATH en caso de desconexión</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Análisis de Payloads</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Los payloads aparecen en formato binario (Protocol Buffers)</p>
+</li>
+<li>
+<p>MQTT Explorer puede mostrar información básica del mensaje</p>
+</li>
+<li>
+<p>Para análisis detallado del contenido, utilizar decodificadores Sparkplug B específicos</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gestión_de_conexiones"><a class="anchor" href="#_gestión_de_conexiones"></a>Gestión de Conexiones</h3>
+<div class="paragraph">
+<p><strong>Reconexión Automática</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Ignition maneja automáticamente las reconexiones al broker</p>
+</li>
+<li>
+<p>Verificar configuración de <strong>Keep Alive</strong> para detección oportuna de desconexiones</p>
+</li>
+<li>
+<p>Monitorear logs para identificar patrones de desconexión</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Calidad de Servicio (QoS)</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Por defecto, Sparkplug B utiliza QoS 0 para datos en tiempo real</p>
+</li>
+<li>
+<p>Los mensajes de control (BIRTH/DEATH) utilizan QoS 1 para garantizar entrega</p>
+</li>
+<li>
+<p>No modificar estos valores sin justificación técnica</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mantenimiento_preventivo_de_opc_y_mqtt"><a class="anchor" href="#_mantenimiento_preventivo_de_opc_y_mqtt"></a>Mantenimiento Preventivo de OPC y MQTT</h3>
+<div class="paragraph">
+<p><strong>Revisión Periódica</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Revisar logs para identificar errores recurrentes</p>
+</li>
+<li>
+<p>Monitorear el crecimiento del History Store local</p>
+</li>
+<li>
+<p>Revisar periódicamente el estado de conexión</p>
+</li>
+<li>
+<p>Ya que no es posible acceder fácilmente a métricas de envío de mensajes y datos, es necesario revisar periódicamente la calidad de los datos enviados. Esto se puede hacer verificando los tags directamente o haciendo uso de herramientas como MQTT Explorer</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Limpieza de Datos</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Establecer que tags son conservados por el store and forward, desde la propiedad de tag "StoreAndForward"</p>
+</li>
+<li>
+<p>Monitorear espacio en disco utilizado por Store and Forward</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_consideraciones_de_sparkplug_b"><a class="anchor" href="#_consideraciones_de_sparkplug_b"></a>Consideraciones de Sparkplug B</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_formato_de_mensajes"><a class="anchor" href="#_formato_de_mensajes"></a>Formato de Mensajes</h3>
+<div class="paragraph">
+<p>Los mensajes publicados utilizan formato <strong>Sparkplug B</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Serialización</strong>: Protocol Buffers (binario, no legible directamente)</p>
+</li>
+<li>
+<p><strong>Estructura</strong>: Incluye metadatos, timestamps y calidad de datos</p>
+</li>
+<li>
+<p><strong>Topics</strong>: Siguen convención <code>spBv1.0/GroupID/NDATA/EdgeNodeID</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_gestión_de_estado"><a class="anchor" href="#_gestión_de_estado"></a>Gestión de Estado</h3>
+<div class="paragraph">
+<p>Sparkplug B incluye mensajes de control de estado:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>NBIRTH</strong>: Declaración de estructura de datos del nodo</p>
+</li>
+<li>
+<p><strong>NDATA</strong>: Datos en tiempo real</p>
+</li>
+<li>
+<p><strong>NDEATH</strong>: Notificación de desconexión del nodo</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_extensión_de_la_configuración"><a class="anchor" href="#_extensión_de_la_configuración"></a>Extensión de la Configuración</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_agregar_nuevos_tags"><a class="anchor" href="#_agregar_nuevos_tags"></a>Agregar Nuevos Tags</h3>
+<div class="paragraph">
+<p>Para publicar variables adicionales:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Añadir tags al Tag Provider <code>CEM_UNS</code> bajo la ruta <code>Cempro/San Miguel</code></p>
+</li>
+<li>
+<p>Los cambios se reflejan automáticamente en las publicaciones MQTT</p>
+</li>
+<li>
+<p>Verificar que aparezcan en el broker de destino</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_múltiples_transmitters"><a class="anchor" href="#_múltiples_transmitters"></a>Múltiples Transmitters</h3>
+<div class="paragraph">
+<p>Para publicar con más de un Transmitter:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Crear nuevo Transmitter siguiendo el mismo procedimiento, preferiblemente iniciar desmarcando "Enabled"</p>
+</li>
+<li>
+<p>Asegurar que el par Group ID y Edge Node ID únicos, en este caso Cempro/San Miguel y Cempro/San Gabriel son válidos al ser combinaciones únicas.</p>
+</li>
+<li>
+<p>Asociar a Set y servidor MQTT correspondientes</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="./_/js/site.js" data-ui-root-path="./_"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+  </body>
+  <script src="./_/js/vendor/lunr.min.js"></script> 
+
+<script src="./_/js/vendor/lunr.stemmer.support.js"></script> 
+
+<script src="./_/js/vendor/lunr.es.js"></script> 
+
+<script src="./_/js/07-search.js"></script> 
+
+ 
+
+ 
+</html>
