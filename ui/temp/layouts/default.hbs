@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+{{> head defaultPageTitle='Untitled'}}
+  </head>
+  <body class="article{{#with (or page.attributes.role page.role)}} {{{this}}}{{/with}}">
+{{> header}}
+{{> body}}
+{{> footer}}
+  </body>
+  <script src="{{uiRootPath}}/js/vendor/lunr.min.js"></script> 
+
+<script src="{{uiRootPath}}/js/vendor/lunr.stemmer.support.js"></script> 
+
+<script src="{{uiRootPath}}/js/vendor/lunr.es.js"></script> 
+
+<script src="{{uiRootPath}}/js/07-search.js"></script> 
+
+ 
+
+ 
+</html>
