@@ -1,0 +1,237 @@
+= Diagnóstico de Conexiones OPC UA
+
+== Síntomas Comunes
+
+=== Estado de Conexión Faulted o Disconnected
+
+* El estado en *Config → OPC Client → OPC Connections* muestra *Faulted* o *Disconnected*
+* La conexión no se establece al guardar la configuración
+* Pérdida intermitente de conexión con el servidor OPC UA
+
+=== Tags en Estado Bad_Stale
+
+* Los tags no muestran valores actualizados en el Tag Browser
+* Los valores permanecen congelados en el último estado conocido
+* Indicadores de calidad muestran errores de comunicación
+
+=== Errores de Certificado
+
+* Mensajes de error relacionados con certificados SSL/TLS
+* Fallos de autenticación al establecer la conexión
+* Rechazos de certificado del servidor OPC UA
+
+== Causas Probables y Acciones de Diagnóstico
+
+=== Problemas de Conectividad de Red
+
+*Verificar conectividad básica:*
+
+[source,bash]
+----
+ping <IP_SERVIDOR_OPC>
+----
+
+*Si el ping falla:*
+
+* Revisar configuración de red del servidor Ignition
+* Verificar conectividad física entre Ignition y PLC
+* Confirmar que no hay firewalls bloqueando el tráfico
+
+*Si el ping funciona pero OPC UA falla:*
+
+* Verificar que el puerto OPC UA esté abierto (típicamente 4840, 4862)
+* Confirmar que el servicio OPC UA esté ejecutándose en el PLC
+
+=== Configuración de Endpoint Incorrecta
+
+*Revisar parámetros de conexión:*
+
+[cols="1,3", options="header"]
+|===
+|Parámetro |Verificación
+
+|*Discovery URL*
+|Debe coincidir con la configuración del servidor
+
+|*Endpoint URL*
+|Verificar IP, puerto y formato correcto
+
+|*Endpoint Host Override*
+|Usar cuando el nombre no resuelve correctamente
+|===
+
+*Procedimiento de verificación:*
+
+. Acceder a *Config → OPC Client → OPC Connections*
+. Editar la conexión problemática
+. Verificar que el *Endpoint URL* coincida exactamente con la configuración del servidor
+. Si se usa nombre de host, confirmar resolución DNS o configurar *Host Override*
+
+=== Problemas de Seguridad y Certificados
+
+*Configuración de Security Mode y Policy:*
+
+* Verificar que *Security Mode* y *Security Policy* coincidan entre cliente y servidor
+* Para troubleshooting inicial, usar *Security Mode: None* y *Security Policy: None*
+
+*Gestión de certificados:*
+
+. Navegar a *Config → Security → OPC Client Security*
+. Verificar que el certificado del servidor esté en la lista *Trusted*
+. Si el certificado no aparece, intentar conexión para generarlo automáticamente
+. Aceptar manualmente el certificado si es requerido
+
+== Análisis de Logs Específicos
+
+=== Configurar Filtrado de Logs
+
+*Acceder a logs OPC UA:*
+
+. Ir a *Status → Diagnostics → Logs*
+. En el filtro, buscar por logger name: `opcua` o `OPC`
+. Configurar *Min Level* a *Debug* para máximo detalle
+
+*Loggers relevantes para OPC UA:*
+
+* `com.inductiveautomation.opcua`
+* `UaClientMessageHandler`
+* `OPCConnection`
+
+=== Interpretación de Mensajes de Error Comunes
+
+*Error: "Connection reset"*
+
+[source]
+----
+Logger: UaClientMessageHandler
+Message: Exception caught: Connection reset
+----
+
+*Causa:* Pérdida de conectividad de red
+
+*Acción:* Verificar estabilidad de red y configuración de Keep Alive
+
+*Error: "Certificate not trusted"*
+
+[source]
+----
+Logger: opcua.client
+Message: Certificate validation failed: Certificate not trusted
+----
+
+*Causa:* Certificado del servidor no está en lista de confianza
+
+*Acción:* Aceptar certificado en *Config → Security → OPC Client Security*
+
+*Error: "Connection refused"*
+
+[source]
+----
+Logger: OPCConnection
+Message: Connection refused to endpoint
+----
+
+*Causa:* Servidor OPC UA no disponible o puerto incorrecto
+
+*Acción:* Verificar que el servicio OPC UA esté ejecutándose y el puerto sea correcto
+
+=== Configuración Avanzada de Logging
+
+*Para diagnóstico detallado:*
+
+. En *Status → Diagnostics → Logs*, hacer clic en *Settings*
+. Buscar logger `com.inductiveautomation.opcua`
+. Cambiar nivel a *DEBUG*
+. Aplicar cambios y reproducir el problema
+
+*Información adicional en modo DEBUG:*
+
+* Detalles de handshake SSL/TLS
+* Intercambio de certificados
+* Parámetros de sesión OPC UA
+* Timing de reconexiones
+
+== Procedimientos de Resolución
+
+=== Si la conexión muestra "Faulted"
+
+. *Verificar configuración básica:*
+   * Endpoint URL correcto
+   * Credenciales válidas (si aplica)
+   * Security settings coincidentes
+
+. *Probar conectividad:*
+   * Ping al servidor OPC UA
+   * Telnet al puerto OPC UA: `telnet <IP> <PUERTO>`
+
+. *Revisar certificados:*
+   * Verificar en *OPC Client Security*
+   * Regenerar certificados si es necesario
+
+. *Analizar logs:*
+   * Activar DEBUG logging
+   * Buscar mensajes específicos de error
+   * Correlacionar timestamps con eventos
+
+=== Si los tags muestran Bad_Stale
+
+. *Verificar estructura de tags:*
+   * Confirmar que los paths OPC UA sean correctos
+   * Validar que las variables existan en el servidor
+
+. *Revisar configuración de suscripciones:*
+   * Verificar *Subscription Rate* en la conexión OPC UA
+   * Confirmar que no hay sobrecarga del servidor
+
+. *Depurar tags específicos:*
+   * Usar *OPC Browser* para navegar la estructura
+   * Probar lectura manual de variables problemáticas
+
+=== Si hay errores de certificado recurrentes
+
+. *Limpiar certificados existentes:*
+   * Eliminar certificados problemáticos de *Trusted*
+   * Permitir regeneración automática
+
+. *Configurar políticas de seguridad:*
+   * Coordinar con administrador del PLC
+   * Definir política común entre cliente y servidor
+
+. *Verificar configuración de tiempo:*
+   * Sincronizar relojes entre Ignition y PLC
+   * Los certificados son sensibles a diferencias de tiempo
+
+== Herramientas de Diagnóstico Adicionales
+
+=== UA Expert (Cliente OPC UA externo)
+
+Utilizar UA Expert para verificar conectividad independiente de Ignition:
+
+. Configurar conexión con los mismos parámetros que Ignition
+. Verificar que la conexión se establezca correctamente
+. Navegar la estructura de variables disponibles
+
+*Si UA Expert funciona pero Ignition no:*
+
+* Comparar configuraciones detalladamente
+* Verificar versiones de certificados
+* Revisar configuraciones específicas de Ignition
+
+=== Herramientas de Red
+
+*Comandos de terminal/PowerShell:*
+
+Desde la línea de comandos es posible utilizar herramientas estándar para verificar conectividad de red, probar puertos específicos y diagnosticar problemas de comunicación.
+
+*Análisis de tráfico:*
+
+Existen herramientas especializadas para captura y análisis de tráfico de red que permiten examinar la comunicación OPC UA a nivel de protocolo, útiles para diagnosticar problemas complejos de conectividad.
+
+== Configuración de Logging
+
+*Configuración recomendada de niveles:*
+
+* Loggers relacionados con OPC UA pueden configurarse en diferentes niveles (DEBUG, INFO, WARN, ERROR)
+* Para operación normal se recomienda nivel INFO o WARN
+* Para troubleshooting detallado activar nivel DEBUG temporalmente
+* Evitar DEBUG permanente en producción para no impactar rendimiento

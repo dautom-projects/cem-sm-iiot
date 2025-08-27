@@ -1,0 +1,78 @@
+= Marco Teórico y Normativo
+== Introducción
+
+Esta sección establece los fundamentos técnicos y estándares que respaldan las configuraciones implementadas en la plataforma de datos IoT de San Miguel. Su propósito es validar que las prácticas aplicadas están alineadas con estándares reconocidos y facilitar la replicación de la solución en futuras implementaciones.
+
+== Estándares y Protocolos Aplicados
+
+
+[width=80%, cols="1,3,3,3", options="header", role="custom-table"]
+|===
+| Estándar/Tecnología | Fundamento Normativo | Aplicación en el Proyecto | Ventaja
+
+| OPC UA (IEC 62541)
+| Estándar IEC 62541 para interoperabilidad, seguridad y modelado de datos en sistemas industriales.
+| El PLC Siemens expone variables vía servidor OPC UA; Ignition actúa como cliente para adquirir datos de forma segura y escalable.
+| Comunicación estandarizada entre fabricantes, seguridad por cifrado y autenticación, y escalabilidad en adquisición de datos.
+
+| MQTT (ISO/IEC 20922)
+| Protocolo ligero de mensajería estandarizado como ISO/IEC 20922, orientado a M2M e IoT.
+| Ignition publica datos al broker en AWS mediante MQTT Transmission, usando QoS, retención de mensajes y persistencia de sesión.
+| Resiliente ante conectividad intermitente; eficiente en uso de ancho de banda en entornos industriales.
+
+| Sparkplug B
+| Especificación de Eclipse Foundation que estandariza el uso de MQTT en aplicaciones industriales IoT.
+| Ignition implementa Sparkplug B para modelado de datos, gestión de estado, namespacing jerárquico y serialización con Protocol Buffers.
+| Unifica múltiples plantas bajo un mismo modelo, evitando conflictos y facilitando la escalabilidad horizontal.
+
+| ISA-95 (IEC 62264)
+| Norma internacional para integración de sistemas empresariales y de control.
+| El Tag Provider CEM_UNS implementa la jerarquía ISA-95: Empresa → Sitio → Área → Unidad → Módulo de Control.
+| Facilita integración con ERP/MES, estandariza jerarquías y mejora la comunicación entre niveles de gestión y operación.
+
+| Unified Namespace (UNS)
+| Patrón arquitectural que centraliza todos los datos en un espacio de nombres único y coherente.
+| Implementado en Ignition como estructura jerárquica con acceso democrático a datos y consistencia semántica.
+| Elimina silos de información, asegura consistencia de datos y permite escalabilidad horizontal.
+|===
+
+== Arquitectura de la plataforma
+
+[.text-center]
+image::cempro/Arquitectura_cempro.png[]
+
+
+=== Función de Cada Componente
+
+==== PLC Siemens (Servidor OPC UA)
+El PLC Siemens incluye un servidor OPC UA integrado que expone las variables de proceso industrial. Este servidor permite que sistemas externos lean datos sin interrumpir las operaciones de control. Las variables se organizan en una estructura de árbol donde cada tag tiene un identificador único y metadatos asociados.
+
+==== Ignition Gateway (Cliente OPC UA + Modelador UNS)
+Ignition funciona como intermediario entre el dominio OT y las tecnologías IT. Como cliente OPC UA, se conecta al PLC para obtener variables de proceso. Existen dos formas de hacerlo:
+
+* **Consulta periódica (polling):** el cliente pregunta al PLC en intervalos fijos, incluso si el valor no ha cambiado, lo que genera tráfico de red innecesario.
+* **Reporte por excepción (subscriptions):** el cliente se suscribe a variables específicas y recibe notificaciones automáticas solo cuando el valor cambia o cumple una condición, reduciendo la carga de comunicación.
+
+Ignition utiliza por defecto el esquema de **reporte por excepción**, lo que asegura un uso eficiente de la red y actualizaciones oportunas de los tags. Una vez recibidos, los datos se reorganizan en una estructura jerárquica basada en ISA-95: *Cempro → San Miguel → Calera → Equipos específicos*. Adicionalmente, implementa **Store and Forward**, guardando datos localmente en disco cuando hay pérdida de conectividad de red.
+
+==== Broker MQTT (AWS)
+El broker MQTT actúa como centro de distribución de mensajes. Recibe publicaciones de Ignition y las entrega a todos los sistemas suscritos. Opera bajo el modelo publisher-subscriber, donde Ignition publica datos y múltiples consumidores pueden suscribirse sin afectar la fuente original. Su ubicación en AWS garantiza alta disponibilidad.
+
+==== IoT Bridge for Snowflake (Cirrus Link)
+Este modulo se suscribe a los mensajes MQTT publicados por Ignition. Su función principal es decodificar el formato Sparkplug B (Protocol Buffers binario) y transformar los datos al formato SQL requerido por Snowflake.
+
+==== Snowflake
+Snowflake recibe los datos transformados y los almacena en tablas estructuradas. Proporciona capacidades de consulta SQL y análisis sobre grandes volúmenes de datos históricos, permitiendo reportes y análisis avanzados de los procesos industriales.
+
+=== Flujo de Datos
+
+Los datos se generan en el PLC Siemens según los ciclos de proceso configurados. Ignition mantiene suscripciones activas a las variables de interés y recibe notificaciones de cambio en tiempo real. Estos datos se modelan internamente siguiendo la estructura UNS y se publican como mensajes MQTT con formato Sparkplug B hacia el broker en AWS. El IoT Bridge consume estos mensajes, los decodifica y los transforma en registros SQL que inserta automáticamente en las tablas correspondientes de Snowflake.
+
+=== Integridad de los Datos
+
+La arquitectura está diseñada para reducir el riesgo de pérdida o inconsistencia de información frente a fallos o interrupciones. Esto se logra mediante:
+
+* **Mecanismos de reconexión y retransmisión (MQTT):** aseguran que los mensajes pendientes sean enviados una vez restablecida la conectividad.
+* **Almacenamiento temporal en disco (Ignition Store and Forward):** permite conservar los datos generados durante una desconexión y reenviarlos posteriormente.
+* **Estructura jerárquica UNS:** facilita la organización coherente de la información a lo largo de los distintos niveles de la planta.
+* **Estandarización con Sparkplug B:** garantiza un formato uniforme de intercambio de datos, evitando ambigüedades y mejorando la consistencia entre sistemas.
