@@ -10,7 +10,7 @@ La documentación se produce en **archivos AsciiDoc (`.adoc`)**, que posteriorme
 - **Documentación en AsciiDoc (`.adoc`)**: archivos fuente que describen la arquitectura, configuración y uso de la plataforma desarrollada.  
 - **Personalización de la interfaz de documentación**: ajustes sobre la UI por defecto, orientados a mejorar la presentación y adecuación al cliente.  
 
-# Visualization
+# Visualización
 
 Para visualizar correctamente la documentación es necesario tener el directorio completo de build/ y abrir el index.html en el navegador. 
 El directorio tiene todas las dependencias necesarias para ejecutar el UI empaquetado.
