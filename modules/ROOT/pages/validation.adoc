@@ -1,0 +1,111 @@
+= Validación del flujo de datos de la plataforma
+:revdate: 2025-09-02
+:doctype: book
+:experimental:
+:icons: font
+:imagesdir: ./images
+:source-highlighter: highlightjs
+
+== Objetivo
+Validar que un tag reporta el mismo valor (y marca de tiempo coherente) a lo largo del pipeline:
+*SCADA → Ignition → Snowflake*.
+
+== Alcance
+Este procedimiento aplica a cualquier tag publicado en el UNS y transportado por el bridge hacia Snowflake.
+
+== Prerrequisitos
+- Acceso al SCADA de planta.
+- Acceso al Ignition Designer (o Gateway + Tag Browser).
+- Acceso a Snowflake (rol/warehouse con permisos de lectura en tabla RAW).
+- Conocer el *UNS Path* del tag a validar.
+
+== Flujo de validación (paso a paso)
+
+. Visualizar la tag en el SCADA
+.. Ubicar el tag objetivo en la pantalla correspondiente del SCADA.
+.. Identificar tres datos: *UNS Path*, *Timestamp* visible en la UI y *Valor*.
++
+image::scada_tag_sample.png[width=800,align=center,title="Captura de la tag en SCADA"]
+
+[NOTE]
+====
+Si el SCADA no muestra *timestamp*, anota la hora local exacta en la que observas el valor (incluye huso horario).
+====
+
+. Ver el dato en Ignition
+.. Abrir el *Tag Browser* y localizar el tag (mismo *UNS Path*).
+.. Clic derecho sobre la tag → *View Diagnostics*.
+.. Confirmar que el *Name/Path*, *Timestamp* y *Value* coinciden con lo observado en SCADA.
++
+image::ignition_diagnostic.png[width=800,align=center,title="Ignition - View Diagnostics del tag"]
+
+[TIP]
+====
+En *View Diagnostics* puedes observar:
+- **Value**: valor actual y calidad.
+- **Timestamp**: marca de tiempo del último valor.
+- **OPC Item** y **Server** si aplica (útil para rastrear la fuente).
+====
+
+. Ver el dato en Snowflake
+.. Usar la marca de tiempo identificada y el *UNS Path* (o fragmento del path) para consultar la tabla RAW.
+.. Ejecutar una consulta como la siguiente (ajusta *EDGE_NODE_ID*, *MSG LIKE* y la ventana temporal):
++
+[source,sql]
+----
+-- SPARKPLUG_RAW
+SELECT
+  TO_TIMESTAMP_TZ(INSERTED_AT/1000) AS TS,
+  *
+FROM CL_BRIDGE_STAGE_DB.STAGE_DB.SPARKPLUG_RAW
+WHERE TS >= DATEADD(hour, -24, CURRENT_TIMESTAMP())
+  AND EDGE_NODE_ID = 'San Miguel'
+  AND MSG LIKE '%Coke/Setpoint_Kilogramos_Coke%'
+  AND MSG LIKE '%1756700957875%'   -- (timestamp/ID dentro del payload si aplica)
+ORDER BY TS DESC
+LIMIT 100;
+----
++
+image::snowflake_raw_query.png[width=900,align=center,title="Query de verificación en Snowflake RAW"]
+
+[IMPORTANT]
+====
+- **Zona horaria**: *INSERTED_AT* normalmente llega en milisegundos (epoch) y *TS* se muestra en UTC. Convierte a la hora local para comparar con SCADA/Ignition.
+- **Filtrado por contenido**: `MSG` guarda el payload Sparkplug B. Usa `LIKE` con el *UNS Path* parcial y, cuando sea posible, un identificador de tiempo/medición para afinar resultados.
+====
+
+== Criterios de aceptación
+- El *Valor* observado en SCADA coincide con el valor en Ignition.
+- El *Valor* e información del payload en Snowflake corresponden a la misma medición (considerando conversión horaria).
+- La *Calidad/Quality* del tag en Ignition es *Good* (o equivalente).
+- Si el valor cambió, se evidencian los nuevos valores en los tres sistemas dentro de un intervalo razonable.
+
+== Solución de problemas (rápidos)
+- **No aparece en Snowflake**: amplía la ventana `DATEADD`, y confirma *EDGE_NODE_ID* y *UNS Path*. Verifica el estado del bridge y latencia.
+- **Timestamps no coinciden**: valida huso horario (UTC vs local) y desfases de NTP en servidores.
+- **Valor distinto en Ignition vs SCADA**: revisa *OPC Item Path* y *Server* en *View Diagnostics*; puede existir un mapeo obsoleto.
+
+== Evidencia sugerida
+Incluye en el reporte final:
+- Captura de pantalla del SCADA con la tag resaltada.
+- Captura de *View Diagnostics* en Ignition.
+- Resultado de la consulta en Snowflake (tabla o captura con *TS*, *UNS Path* y *Value*).
+- Breve nota de equivalencia horaria (UTC ↔ local).
+
+== Anexo: plantilla de consulta
+Usa esta plantilla y reemplaza los marcadores:
+
+[source,sql]
+----
+SELECT
+  TO_TIMESTAMP_TZ(INSERTED_AT/1000) AS TS,
+  *
+FROM <DB>.<SCHEMA>.SPARKPLUG_RAW
+WHERE TS BETWEEN :start_ts_utc AND :end_ts_utc
+  AND EDGE_NODE_ID = :edge
+  AND MSG LIKE CONCAT('%', :uns_fragment, '%')
+  /* Opcional: anclar por ID/ts interno del payload */
+  AND MSG LIKE CONCAT('%', :payload_anchor, '%')
+ORDER BY TS DESC
+LIMIT 200;
+----

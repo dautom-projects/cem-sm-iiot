@@ -4,3 +4,4 @@
     ** xref:ibsnow.adoc[IoT Bridge for Snowflake (Cirrus Link)]
     ** xref:uns.adoc[Modelado UNS]
     ** xref:troubleshooting.adoc[Troubleshooting]
+    ** xref:validation.adoc[Validación de datos]
