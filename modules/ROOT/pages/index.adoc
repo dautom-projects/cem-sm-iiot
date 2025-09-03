@@ -39,7 +39,7 @@ Esta sección establece los fundamentos técnicos y estándares que respaldan la
 == Arquitectura de la plataforma
 
 [.text-center]
-image::cempro/Arquitectura_cempro.png[]
+image::cempro/Arquitectura.svg[]
 
 
 === Función de Cada Componente

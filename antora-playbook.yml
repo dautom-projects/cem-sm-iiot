@@ -15,6 +15,7 @@ asciidoc:
   attributes:
     source-highlighter: highlightjs
     icons: font
+    page-pagination: ''  # ← AQUÍ está la clave
 
 output:
   dir: ./build/site
