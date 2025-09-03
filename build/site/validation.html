@@ -130,7 +130,7 @@
 <p>Acceso a Snowflake (rol/warehouse con permisos de lectura en tabla RAW).</p>
 </li>
 <li>
-<p>Conocer el <strong>UNS Path</strong> del tag a validar.</p>
+<p>Conocer el <strong>OPC Path</strong> y <strong>UNS Path</strong> del tag a validar.</p>
 </li>
 </ul>
 </div>
@@ -147,12 +147,9 @@
 <ol class="loweralpha" type="a">
 <li>
 <p>Ubicar el tag objetivo en la pantalla correspondiente del SCADA.</p>
-</li>
-<li>
-<p>Identificar tres datos: <strong>UNS Path</strong>, <strong>Timestamp</strong> visible en la UI y <strong>Valor</strong>.</p>
-<div class="imageblock text-center unresolved">
+<div class="imageblock text-center">
 <div class="content">
-<img src="scada_tag_sample.png" alt="scada tag sample" width="800">
+<img src="_images/cempro/scada_tag_sample.png" alt="scada tag sample" width="800">
 </div>
 <div class="title">Figure 1. Captura de la tag en SCADA</div>
 </div>
@@ -160,73 +157,46 @@
 </ol>
 </div>
 </li>
-</ol>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Si el SCADA no muestra <strong>timestamp</strong>, anota la hora local exacta en la que observas el valor (incluye huso horario).</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
 <li>
 <p>Ver el dato en Ignition</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Abrir el <strong>Tag Browser</strong> y localizar el tag (mismo <strong>UNS Path</strong>).</p>
+<p>Abrir el <strong>Tag Browser</strong> y localizar el tag.
+En este caso el <strong>UNS Path</strong> es</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">Cempro/San Miguel/Calera/Horno 3/Edge/Coke/Setpoint_Kilogramos_Coke.</code></pre>
+</div>
+</div>
 </li>
 <li>
 <p>Clic derecho sobre la tag → <strong>View Diagnostics</strong>.</p>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/cempro/view_diagnostics.png" alt="view diagnostics" width="800">
+</div>
+<div class="title">Figure 2. Ruta View Diagnostics</div>
+</div>
 </li>
 <li>
-<p>Confirmar que el <strong>Name/Path</strong>, <strong>Timestamp</strong> y <strong>Value</strong> coinciden con lo observado en SCADA.</p>
-<div class="imageblock text-center unresolved">
+<p>Confirmar que el <strong>Value</strong> coincide con lo observado en SCADA.</p>
+<div class="imageblock text-center">
 <div class="content">
-<img src="ignition_diagnostic.png" alt="ignition diagnostic" width="800">
+<img src="_images/cempro/ignition_diagnostic.png" alt="ignition diagnostic" width="800">
 </div>
-<div class="title">Figure 2. Ignition - View Diagnostics del tag</div>
-</div>
-</li>
-</ol>
+<div class="title">Figure 3. Ignition - View Diagnostics del tag</div>
 </div>
 </li>
 </ol>
 </div>
-<div class="admonitionblock tip">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-tip" title="Tip"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>En <strong>View Diagnostics</strong> puedes observar:
-- <strong>Value</strong>: valor actual y calidad.
-- <strong>Timestamp</strong>: marca de tiempo del último valor.
-- <strong>OPC Item</strong> y <strong>Server</strong> si aplica (útil para rastrear la fuente).</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>Ver el dato en Snowflake</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Usar la marca de tiempo identificada y el <strong>UNS Path</strong> (o fragmento del path) para consultar la tabla RAW.</p>
+<p>Usar la marca de tiempo identificada y el <strong>UNS Path</strong> (del Ignition) para consultar la tabla RAW.</p>
 </li>
 <li>
 <p>Ejecutar una consulta como la siguiente (ajusta <strong>EDGE_NODE_ID</strong>, <strong>MSG LIKE</strong> y la ventana temporal):</p>
@@ -237,20 +207,26 @@ SELECT
   TO_TIMESTAMP_TZ(INSERTED_AT/1000) AS TS,
   *
 FROM CL_BRIDGE_STAGE_DB.STAGE_DB.SPARKPLUG_RAW
-WHERE TS &gt;= DATEADD(hour, -24, CURRENT_TIMESTAMP())
+WHERE TS &gt;= DATEADD(hour, -4, CURRENT_TIMESTAMP()) -- Ajustar según cuánto tiempo atrás se quiera buscar
   AND EDGE_NODE_ID = 'San Miguel'
   AND MSG LIKE '%Coke/Setpoint_Kilogramos_Coke%'
-  AND MSG LIKE '%1756700957875%'   -- (timestamp/ID dentro del payload si aplica)
+  AND MSG LIKE '%1756700957875%'
 ORDER BY TS DESC
 LIMIT 100;</code></pre>
 </div>
 </div>
-<div class="imageblock text-center unresolved">
+</li>
+<li>
+<p>Buscar el campo MSG, seleccionar y buscar el path usando Ctrl + F</p>
+<div class="imageblock text-center">
 <div class="content">
-<img src="snowflake_raw_query.png" alt="snowflake raw query" width="900">
+<img src="_images/cempro/snowflake_raw_query.png" alt="snowflake raw query" width="900">
 </div>
-<div class="title">Figure 3. Query de verificación en Snowflake RAW</div>
+<div class="title">Figure 4. Query de verificación en Snowflake RAW</div>
 </div>
+</li>
+<li>
+<p>Confirmar que el <strong>Value</strong> coincide con lo observado en SCADA e Ignition.</p>
 </li>
 </ol>
 </div>
@@ -267,10 +243,7 @@ LIMIT 100;</code></pre>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Zona horaria</strong>: <strong>INSERTED_AT</strong> normalmente llega en milisegundos (epoch) y <strong>TS</strong> se muestra en UTC. Convierte a la hora local para comparar con SCADA/Ignition.</p>
-</li>
-<li>
-<p><strong>Filtrado por contenido</strong>: <code>MSG</code> guarda el payload Sparkplug B. Usa <code>LIKE</code> con el <strong>UNS Path</strong> parcial y, cuando sea posible, un identificador de tiempo/medición para afinar resultados.</p>
+<p><strong>Zona horaria</strong>: Snowflake almacena timestamps en UTC 0. Por lo tanto, si el SCADA e Ignition están en hora local (ej. UTC -6, Guatemala), se debe tener en cuenta la diferencia horaria.</p>
 </li>
 </ul>
 </div>
@@ -313,44 +286,9 @@ LIMIT 100;</code></pre>
 <p><strong>Timestamps no coinciden</strong>: valida huso horario (UTC vs local) y desfases de NTP en servidores.</p>
 </li>
 <li>
-<p><strong>Valor distinto en Ignition vs SCADA</strong>: revisa <strong>OPC Item Path</strong> y <strong>Server</strong> en <strong>View Diagnostics</strong>; puede existir un mapeo obsoleto.</p>
+<p><strong>Valor distinto en Ignition vs SCADA</strong>: revisa <strong>OPC Item Path</strong> y <strong>Server</strong> en las propiedades del tag; puede existir un mapeo obsoleto.</p>
 </li>
 </ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_evidencia_sugerida"><a class="anchor" href="#_evidencia_sugerida"></a>Evidencia sugerida</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Incluye en el reporte final:
-- Captura de pantalla del SCADA con la tag resaltada.
-- Captura de <strong>View Diagnostics</strong> en Ignition.
-- Resultado de la consulta en Snowflake (tabla o captura con <strong>TS</strong>, <strong>UNS Path</strong> y <strong>Value</strong>).
-- Breve nota de equivalencia horaria (UTC ↔ local).</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_anexo_plantilla_de_consulta"><a class="anchor" href="#_anexo_plantilla_de_consulta"></a>Anexo: plantilla de consulta</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Usa esta plantilla y reemplaza los marcadores:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-sql hljs" data-lang="sql">SELECT
-  TO_TIMESTAMP_TZ(INSERTED_AT/1000) AS TS,
-  *
-FROM &lt;DB&gt;.&lt;SCHEMA&gt;.SPARKPLUG_RAW
-WHERE TS BETWEEN :start_ts_utc AND :end_ts_utc
-  AND EDGE_NODE_ID = :edge
-  AND MSG LIKE CONCAT('%', :uns_fragment, '%')
-  /* Opcional: anclar por ID/ts interno del payload */
-  AND MSG LIKE CONCAT('%', :payload_anchor, '%')
-ORDER BY TS DESC
-LIMIT 200;</code></pre>
-</div>
 </div>
 </div>
 </div>
