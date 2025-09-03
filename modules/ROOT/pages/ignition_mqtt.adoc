@@ -1,9 +1,6 @@
 = Configuración MQTT Transmission en Ignition
 
-
-
-
-=== Acceso al Módulo
+== Acceso al Módulo
 
 . En Ignition Gateway, navegar a *Config → MQTT Transmission* (buscar en panel azul) → *Settings → Transmitters*
 

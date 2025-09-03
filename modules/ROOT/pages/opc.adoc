@@ -1,5 +1,6 @@
 = Configuración Cliente OPC UA en Ignition
-
+:page-prev: index.adoc
+:page-next: ignition_mqtt.adoc
 == Acceso al Módulo OPC UA
 
 . Ingresar a la interfaz web de Ignition Gateway en el navegador: `http://<ip-del-host>:8088` (ejemplo: `http://localhost:8088`)
