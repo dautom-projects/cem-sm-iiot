@@ -1,0 +1,90 @@
+= Modelado UNS en Ignition
+
+== Propósito del Modelado UNS
+
+El Unified Namespace (UNS) en Ignition transforma la estructura técnica de tags OPC UA en una jerarquía lógica y semánticamente consistente. Esta transformación permite que los datos industriales sean comprensibles y accesibles independientemente del sistema que los consuma.
+
+== Estructura Jerárquica ISA-95
+
+El modelado sigue la jerarquía funcional definida por ISA-95, organizando los datos desde el nivel empresarial hasta el nivel de equipos:
+
+[source]
+----
+Cempro (Enterprise)
+└── San Miguel (Site)
+    ├── Calera (Area)
+    │   └── Horno 3 (Work Unit)
+    │       ├── Edge
+    │       ├── Edge Basic
+    │       ├── Scanner
+    │       └── Scanner 12
+    └── Clinkerizacion (Area)
+        └── Horno 3 (Work Unit)
+            ├── Edge
+            ├── Edge Basic
+            ├── Scanner
+            └── Scanner 12
+----
+
+== Transformación de Tags OPC UA
+
+=== Tags Originales del PLC
+
+Los tags provenientes del servidor OPC UA tienen estructura técnica poco descriptiva:
+
+*Ejemplo de path OPC UA*: `ns=1;s=t|WINCC_CALERA_HORNOS_SRVCAL01::SM_323_MR1_PCSPM`
+
+Esta nomenclatura incluye:
+
+* `ns=1`: Namespace del servidor OPC UA
+* `s=t|WINCC_CALERA_HORNOS_SRVCAL01::`: Prefijo del sistema SCADA
+* `SM_323_MR1_PCSPM`: Identificador técnico de la variable
+
+=== Tags Estructurados en UNS
+
+El mismo tag se modela en la estructura UNS como:
+
+*Path UNS*: `Cempro/San Miguel/Calera/Horno 3/Scanner/SM_323_MR1_PCSPM`
+
+Esta estructura proporciona contexto semántico:
+
+* *Cempro*: Empresa propietaria
+* *San Miguel*: Planta específica
+* *Calera*: Área de producción (diferente de Clinkerización)
+* *Horno 3*: Equipo específico
+* *Scanner*: Tipo de dispositivo o sistema
+* *SM_323_MR1_PCSPM*: Variable específica con significado técnico
+
+== Implementación mediante UDTs
+
+=== User Defined Types (UDTs)
+
+Los UDTs actúan como plantillas que definen la estructura repetible para equipos similares:
+
+*Estructura de UDT para Horno*:
+
+[source]
+----
+Horno_UDT
+├── Parameters (configuración)
+│   ├── OPC: Siemens_Calera
+│   └── Path: ns=1;s=t|WINCC_CALERA_HORNOS_SRVCAL01::
+├── Edge (variables de control)
+├── Edge Basic (variables básicas)
+├── Scanner (variables de sensores)
+└── Scanner 12 (variables específicas sensor 12)
+----
+
+=== Instanciación en Tag Provider
+
+Las instancias de UDTs se crean en el Tag Provider `CEM_UNS` siguiendo la estructura jerárquica definida.
+
+== Beneficios del Modelado
+
+*Escalabilidad*:: Agregar nuevos hornos o áreas requiere solo instanciar UDTs existentes con nuevos parámetros.
+
+*Consistencia*:: Todos los equipos similares siguen la misma estructura, facilitando el desarrollo de aplicaciones.
+
+*Trazabilidad*:: La jerarquía completa identifica inequívocamente cada variable y su contexto operacional.
+
+*Interoperabilidad*:: Sistemas downstream pueden navegar la estructura sin conocimiento específico del PLC original.

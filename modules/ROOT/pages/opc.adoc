@@ -1,0 +1,122 @@
+= Configuración Cliente OPC UA en Ignition
+:page-prev: index.adoc
+:page-next: ignition_mqtt.adoc
+== Acceso al Módulo OPC UA
+
+. Ingresar a la interfaz web de Ignition Gateway en el navegador: `http://<ip-del-host>:8088` (ejemplo: `http://localhost:8088`)
+
+. Navegar a *Config → OPC Client* (buscar en panel azul) → *OPC Connections*
+
+. Hacer clic en *Create new OPC Connection*
+
+== Configuración de Conexión
+
+*Tipo de conexión*: Seleccionar *OPC UA Connection*
+
+*Nombre de conexión*: Definir identificador según estándar de nomenclatura interna (ejemplo: `Siemens_Calera`)
+
+== Parámetros del Servidor
+
+En la mayoría de los casos basta con configurar únicamente el **Discovery URL**, ya que Ignition detecta automáticamente el Endpoint y otros parámetros.  
+Sin embargo,es posible acceder a configuraciones avanzadas (p. ej., resolución de nombre de host o definición de seguridad). En ese caso, se pueden completar los siguientes campos:
+
+[cols="1,2,3", options="header"]
+|===
+|Parámetro |Valor Configurado |Descripción
+
+|*Discovery URL*
+|`opc.tcp://10.80.2.70:4862/discovery`
+|Dirección principal de descubrimiento. Ignition obtiene automáticamente los Endpoints disponibles a partir de este valor.
+
+|*Endpoint URL* _(automático)_
+|`opc.tcp://CLIENTE3:4862`
+|Se completa automáticamente al conectarse al servidor. Indica el Endpoint utilizado.
+
+|*Endpoint Host Override* _(opcional)_
+|`10.80.2.70`
+|Permite forzar la IP real del servidor si el nombre (CLIENTE3) no se resuelve correctamente en DNS.
+
+|*Security Mode* _(opcional)_
+|`None`
+|Define si se aplica firma o cifrado de mensajes. Requiere que coincida con la configuración del servidor.
+
+|*Security Policy* _(opcional)_
+|`None`
+|Especifica la política criptográfica. Debe coincidir con la ofrecida por el servidor.
+|===
+
+
+[NOTE]
+====
+La política de seguridad y el modo de conexión deben concordar con el servidor OPC del PLC para garantizar compatibilidad.
+====
+
+== Conexión y Validación
+
+. *Guardar los cambios* haciendo clic en el botón correspondiente
+
+. *Verificar estado de conexión*: El estado debe mostrar *Connected*
+
+. *Revisar certificados*: En *Status → OPC Connections* verificar que no existan errores de certificado
+
+. *Gestión de certificados*: Si hay seguridad en la conexión, ya sea encriptado o con llaves, aceptar el certificado del servidor OPC UA desde *Config → Security → OPC Client Security*
+
+[WARNING]
+====
+Típicamente, el certificado se genera automáticamente por el servidor. Algunos errores de conexión pueden derivarse de la ausencia de certificado o no haberlo aceptado.
+====
+
+== Verificación con OPC Browser
+
+Utilizar el *OPC Browser* integrado en Ignition para:
+
+. Navegar por la estructura de tags del servidor OPC UA
+. Identificar el path base para las variables de interés
+. Realizar pruebas de lectura de valores
+
+El OPC Browser es una herramienta accesible desde el Ignition Designer, dando click al Icono + en la barra superior del Tag Browser y seleccionando "Browse Devices".
+
+*Ejemplo de path identificado*: `ns=1;s=t|WINCC_CALERA_HORNOS_SRVCAL01::`
+
+image::cempro/OPC_browser.png[OPC Browser,620,align="center"]
+
+== Modelado de Tags en Tag Provider
+
+Una vez establecida la conexión OPC UA:
+
+=== Definición de UDTs (User Defined Types)
+
+. Crear UDTs según la estructura de la VMT (Variable Master Table)
+. Parametrizar el servidor OPC y el path base en cada UDT
+
+*Parámetros de UDT*:
+
+[cols="1,2", options="header"]
+|===
+|Parámetro |Valor
+
+|*OPC*
+|`Siemens_Calera`
+
+|*Path*
+|`ns=1;s=t\|WINCC_CALERA_HORNOS_SRVCAL01::`
+|===
+
+=== Creación de Instancias en Tag Provider
+
+. Crear instancias de UDTs en el Tag Provider *CEM_UNS*
+. Seguir la estructura jerárquica ISA-95:
+   * *Cempro* (Enterprise)
+   * *San Miguel* (Site)  
+   * *Calera* (Area)
+   * *Equipos específicos* (Work Units)
+
+image::cempro/Estructura_tags.png[Estructura de Tags,600,align="center"]
+
+=== Validación de Datos
+
+Verificar en el *Tag Browser* que:
+
+* Los tags muestren valores actualizados
+* No hay errores de calidad (Consultar troubleshooting).
+* Los timestamps se actualizan correctamente

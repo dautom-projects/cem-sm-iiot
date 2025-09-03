@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Modelado UNS en Ignition :: CEMPRO Docs</title>
+    <link rel="prev" href="ibsnow.html">
+    <link rel="next" href="troubleshooting.html">
+    <meta name="generator" content="Antora 3.1.12">
+    <link rel="stylesheet" href="./_/css/site.css">
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href=".">
+        <img src="./_/img/logo.png" alt="Logo" class="navbar-logo" style="height: 44px; margin-right: 8px; vertical-align: middle;">
+        CEMPRO Docs
+      </a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="ROOT" data-version="">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">Cempro</a></h3>
+<ul class="nav-list">
+  <li class="nav-item has-children" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item has-children" data-depth="1">
+    <button class="nav-item-toggle"></button>
+    <a class="nav-link" href="index.html">Plataforma de datos IoT San Miguel</a>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="opc.html">Ignition como Cliente OPC UA</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ignition_mqtt.html">Modulo MQTT Transmission (Cirrus Link)</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="ibsnow.html">IoT Bridge for Snowflake (Cirrus Link)</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="2">
+    <a class="nav-link" href="uns.html">Modelado UNS</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="troubleshooting.html">Troubleshooting</a>
+  </li>
+  <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="validation.html">Validación de datos</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Cempro</span>
+    <span class="version"></span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <div class="title"><a href="index.html">Cempro</a></div>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Cempro</a></li>
+    <li><a href="index.html">Plataforma de datos IoT San Miguel</a></li>
+    <li><a href="uns.html">Modelado UNS</a></li>
+  </ul>
+</nav>
+<div class="edit-this-page"><a href="file:///C:/Users/giljo/Desktop/DautomLocal/CEM/cem-sanmiguel/cem-sm-iiot/modules/ROOT/pages/uns.adoc">Edit this Page</a></div>
+</div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Modelado UNS en Ignition</h1>
+<div class="sect1">
+<h2 id="_propósito_del_modelado_uns"><a class="anchor" href="#_propósito_del_modelado_uns"></a>Propósito del Modelado UNS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>El Unified Namespace (UNS) en Ignition transforma la estructura técnica de tags OPC UA en una jerarquía lógica y semánticamente consistente. Esta transformación permite que los datos industriales sean comprensibles y accesibles independientemente del sistema que los consuma.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_estructura_jerárquica_isa_95"><a class="anchor" href="#_estructura_jerárquica_isa_95"></a>Estructura Jerárquica ISA-95</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>El modelado sigue la jerarquía funcional definida por ISA-95, organizando los datos desde el nivel empresarial hasta el nivel de equipos:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Cempro (Enterprise)
+└── San Miguel (Site)
+    ├── Calera (Area)
+    │   └── Horno 3 (Work Unit)
+    │       ├── Edge
+    │       ├── Edge Basic
+    │       ├── Scanner
+    │       └── Scanner 12
+    └── Clinkerizacion (Area)
+        └── Horno 3 (Work Unit)
+            ├── Edge
+            ├── Edge Basic
+            ├── Scanner
+            └── Scanner 12</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_transformación_de_tags_opc_ua"><a class="anchor" href="#_transformación_de_tags_opc_ua"></a>Transformación de Tags OPC UA</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_tags_originales_del_plc"><a class="anchor" href="#_tags_originales_del_plc"></a>Tags Originales del PLC</h3>
+<div class="paragraph">
+<p>Los tags provenientes del servidor OPC UA tienen estructura técnica poco descriptiva:</p>
+</div>
+<div class="paragraph">
+<p><strong>Ejemplo de path OPC UA</strong>: <code>ns=1;s=t|WINCC_CALERA_HORNOS_SRVCAL01::SM_323_MR1_PCSPM</code></p>
+</div>
+<div class="paragraph">
+<p>Esta nomenclatura incluye:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ns=1</code>: Namespace del servidor OPC UA</p>
+</li>
+<li>
+<p><code>s=t|WINCC_CALERA_HORNOS_SRVCAL01::</code>: Prefijo del sistema SCADA</p>
+</li>
+<li>
+<p><code>SM_323_MR1_PCSPM</code>: Identificador técnico de la variable</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tags_estructurados_en_uns"><a class="anchor" href="#_tags_estructurados_en_uns"></a>Tags Estructurados en UNS</h3>
+<div class="paragraph">
+<p>El mismo tag se modela en la estructura UNS como:</p>
+</div>
+<div class="paragraph">
+<p><strong>Path UNS</strong>: <code>Cempro/San Miguel/Calera/Horno 3/Scanner/SM_323_MR1_PCSPM</code></p>
+</div>
+<div class="paragraph">
+<p>Esta estructura proporciona contexto semántico:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Cempro</strong>: Empresa propietaria</p>
+</li>
+<li>
+<p><strong>San Miguel</strong>: Planta específica</p>
+</li>
+<li>
+<p><strong>Calera</strong>: Área de producción (diferente de Clinkerización)</p>
+</li>
+<li>
+<p><strong>Horno 3</strong>: Equipo específico</p>
+</li>
+<li>
+<p><strong>Scanner</strong>: Tipo de dispositivo o sistema</p>
+</li>
+<li>
+<p><strong>SM_323_MR1_PCSPM</strong>: Variable específica con significado técnico</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_implementación_mediante_udts"><a class="anchor" href="#_implementación_mediante_udts"></a>Implementación mediante UDTs</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_user_defined_types_udts"><a class="anchor" href="#_user_defined_types_udts"></a>User Defined Types (UDTs)</h3>
+<div class="paragraph">
+<p>Los UDTs actúan como plantillas que definen la estructura repetible para equipos similares:</p>
+</div>
+<div class="paragraph">
+<p><strong>Estructura de UDT para Horno</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">Horno_UDT
+├── Parameters (configuración)
+│   ├── OPC: Siemens_Calera
+│   └── Path: ns=1;s=t|WINCC_CALERA_HORNOS_SRVCAL01::
+├── Edge (variables de control)
+├── Edge Basic (variables básicas)
+├── Scanner (variables de sensores)
+└── Scanner 12 (variables específicas sensor 12)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_instanciación_en_tag_provider"><a class="anchor" href="#_instanciación_en_tag_provider"></a>Instanciación en Tag Provider</h3>
+<div class="paragraph">
+<p>Las instancias de UDTs se crean en el Tag Provider <code>CEM_UNS</code> siguiendo la estructura jerárquica definida.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_beneficios_del_modelado"><a class="anchor" href="#_beneficios_del_modelado"></a>Beneficios del Modelado</h2>
+<div class="sectionbody">
+<div class="dlist">
+<dl>
+<dt class="hdlist1"><strong>Escalabilidad</strong></dt>
+<dd>
+<p>Agregar nuevos hornos o áreas requiere solo instanciar UDTs existentes con nuevos parámetros.</p>
+</dd>
+<dt class="hdlist1"><strong>Consistencia</strong></dt>
+<dd>
+<p>Todos los equipos similares siguen la misma estructura, facilitando el desarrollo de aplicaciones.</p>
+</dd>
+<dt class="hdlist1"><strong>Trazabilidad</strong></dt>
+<dd>
+<p>La jerarquía completa identifica inequívocamente cada variable y su contexto operacional.</p>
+</dd>
+<dt class="hdlist1"><strong>Interoperabilidad</strong></dt>
+<dd>
+<p>Sistemas downstream pueden navegar la estructura sin conocimiento específico del PLC original.</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<nav class="pagination">
+  <span class="prev"><a href="ibsnow.html">IoT Bridge for Snowflake (Cirrus Link)</a></span>
+  <span class="next"><a href="troubleshooting.html">Troubleshooting</a></span>
+</nav>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="./_/js/site.js" data-ui-root-path="./_"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+  </body>
+  <script src="./_/js/vendor/lunr.min.js"></script> 
+
+<script src="./_/js/vendor/lunr.stemmer.support.js"></script> 
+
+<script src="./_/js/vendor/lunr.es.js"></script> 
+
+<script src="./_/js/07-search.js"></script> 
+
+ 
+
+ 
+</html>

@@ -1,0 +1,21 @@
+site:
+  title: CEMPRO Docs
+  start_page: ROOT::index.adoc
+content:
+  sources:
+    - url: .
+      branches: HEAD
+
+ui:
+  bundle:
+    url: ./ui/ui-bundle.zip
+    snapshot: "true"
+
+asciidoc:
+  attributes:
+    source-highlighter: highlightjs
+    icons: font
+    page-pagination: ''  # ← AQUÍ está la clave
+
+output:
+  dir: ./build/site

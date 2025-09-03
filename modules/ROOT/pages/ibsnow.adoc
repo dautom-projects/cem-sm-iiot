@@ -1,0 +1,43 @@
+== Configuración del Módulo IoT Bridge for Snowflake (Cirrus Link)
+
+Este módulo actúa como agente puente entre el broker MQTT (Ignition + MQTT Distributor alojado en AWS y Snowflake, consumiendo mensajes Sparkplug MQTT y enviándolos automáticamente a Snowflake con mínima o ninguna necesidad de desarrollo adicional.
+
+=== Descripción General
+- Se despliega en AWS o Azure.
+- Consumidor de mensajes Sparkplug provenientes del broker MQTT.
+- Auto-aprende el modelo de datos y activos en Snowflake, habilitando ingestión en tiempo real sin código.
+
+=== Despliegue
+1. Lanzar la AMI desde AWS Marketplace (versión recomendada v2.0.0), sistema operativo Ubuntu 24.04 LTS.:contentReference  
+2. Acceder al host vía SSH (consulta las guías *AWS AMI Access Instructions* o *Azure VM Access Instructions* disponibles en la documentación oficial).
+
+=== Modificación del archivo de configuración (`ibsnow.properties`)
+Ruta: `/opt/ibsnow/conf/ibsnow.properties`
+
+Parámetros clave:
+
+[multiline]
+----
+# MQTT Broker (soporta múltiples)
+mqtt_server_url.1 = ssl://<MQTT_BROKER_URL>:8883
+mqtt_server_name.1 = AWS MQTT Broker
+mqtt_sparkplug_subscriptions.1 = spBv1.0/GroupID/#
+snowflake_application_enabled = true
+snowflake_mqtt_application_enabled = true
+# Ingestión en canales personalizados
+snowflake_streaming_channel_scheme = EDGE_ID
+# Tabla destino en Snowflake
+snowflake_streaming_table_name = SPARKPLUG_RAW
+# Configuración de ingestión
+snowflake_streaming_ingest_task_period = 1
+snowflake_max_streaming_insert_batch_size = 0
+----
+
+Estas opciones permiten:
+
+- Leer mensajes MQTT Sparkplug desde el broker (puede ser genérico o específico, si se usa `spBv1.0/#` consume todo).
+- Activar la ingestión Sparkplug y también la ingestión de mensajes MQTT en crudo (raw MQTT), si se desea. 
+- Definir la forma cómo se organizan los canales en Snowflake (por ejemplo, usando Group ID, Edge ID, etc.)
+
+=== Seguridad TLS / Certificados
+- Si se usa TLS en el broker MQTT, debes copiar la cadena de certificados (CA chain) a la instancia del Bridge y referenciarla en `mqtt_ca_cert_chain_path.X` dentro del archivo `ibsnow.properties`. Luego reinicia el servicio con:

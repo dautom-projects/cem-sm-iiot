@@ -1,0 +1,235 @@
+= Configuración MQTT Transmission en Ignition
+
+== Acceso al Módulo
+
+. En Ignition Gateway, navegar a *Config → MQTT Transmission* (buscar en panel azul) → *Settings → Transmitters*
+
+. Crear nuevo Transmitter con los siguientes parámetros:
+
+== Configurar Set
+Un Set es el componente que vincula los transmitters con los servidores MQTT. Actúa como un puente de configuración que determina qué servidor utilizará cada transmitter para publicar sus datos.
+
+. En Ignition Gateway, navegar a Config → MQTT Transmission (buscar en panel azul) → Settings → Sets
+
+. Agregar nombre del set (ejemplo: `UNS`)
+
+== Creación de MQTT Transmitter
+
+[cols="1,2,3", options="header"]
+|===
+|Parámetro |Valor de Ejemplo |Descripción
+
+|*Nombre*
+|`SMSNOWFLAKETR`
+|Identificador del transmitter
+
+|*Enabled*
+|`False` (inicialmente)
+|Mantener deshabilitado durante configuración
+
+|*Tag Provider*
+|`CEM_UNS`
+|Provider que contiene los tags a transmitir
+
+|*Tag Path*
+|`Cempro/San Miguel`
+|Ruta base de los tags a publicar
+
+|*Set*
+|`UNS`
+|Set que vincula transmitter con servidor
+
+|*Convert UDT*
+|`Unchecked`
+|Mantener estructura UDT original
+
+|*Group ID*
+|`Cempro`
+|Identificador de grupo Sparkplug B
+
+|*Edge Node ID*
+|`San Miguel`
+|Identificador de nodo edge
+|===
+
+[NOTE]
+====
+Group ID y Edge Node ID deben ser únicos por broker según especificación Sparkplug B. No pueden existir dos transmitters con la misma combinación.
+====
+
+== Configuración de History Store (Store and Forward)
+
+Para garantizar continuidad de datos ante desconexiones:
+
+=== Crear History Store
+
+. Navegar a *MQTT Transmission → History Stores*
+
+. Crear nuevo store:
+
+[cols="1,2", options="header"]
+|===
+|Parámetro |Valor
+
+|*Nombre*
+|`SM In-Disk Store`
+
+|*Tipo*
+|`Disk`
+
+|*Tamaño máximo*
+|Según retención deseada
+|===
+
+=== Asociar Store al Transmitter
+
+. En la configuración del Transmitter, asignar el *History Store* creado
+. Esto habilita almacenamiento local cuando hay pérdida de conectividad
+
+== Configuración del Servidor MQTT
+
+=== Crear Configuración de Server
+
+. Navegar a *MQTT Transmission → Servers*
+
+. Crear nuevo servidor MQTT:
+
+image::cempro/Server_settings.png[Configuración del servidor,720,align="center"]
+
+[cols="1,2", options="header"]
+|===
+|Parámetro |Valor Configurado
+
+|*Name*
+|`SVIoT`
+
+|*URL*
+|`tcp://10.98.12.42:1883`
+
+|*Server Set*
+|`UNS`
+
+|*Username*
+|`sanmiguel.edge.transmission`
+
+|*Password*
+|(según credenciales configuradas)
+
+|*Keep Alive*
+|`60` segundos
+|===
+
+=== Configuración TLS (si aplica)
+
+Para conexiones seguras (puerto 8883):
+
+* Cargar certificados en *Config → MQTT Transmission → Servers → Certificates*
+* Configurar *SSL/TLS Settings* según requerimientos del broker
+
+=== Habilitar Transmitter
+
+. Una vez configurados todos los componentes, habilitar el Transmitter
+. Verificar estado de conexión en *Status → MQTT Transmission*
+
+== Validación de Funcionamiento
+
+=== Verificar Estados
+
+*Estado del Servidor*: En *Status → MQTT Transmission → Servers*, confirmar estado *Connected*
+
+*Estado del Transmitter*: Verificar que esté *Enabled* y sin errores
+
+=== Monitoreo de Publicaciones
+
+. Verificar logs en *Status → Logs* filtrando por categoría MQTT
+. Confirmar que se están publicando mensajes hacia el broker
+. Utilizar herramientas como MQTT Explorer para monitorear tráfico
+
+== Recomendaciones para MQTT
+
+=== Monitoreo con MQTT Explorer
+
+MQTT Explorer es una herramienta cliente esencial para diagnóstico y monitoreo de publicaciones MQTT:
+
+*Instalación y Configuración*:
+
+* Descargar desde el sitio oficial de MQTT Explorer
+* Configurar conexión al broker usando los mismos parámetros del servidor configurado en Ignition
+* Conectar usando las credenciales `sanmiguel.edge.transmission`
+
+*Verificación de Topics Sparkplug B*:
+
+* Los topics siguen el patrón: `spBv1.0/Cempro/NDATA/San Miguel`
+* Validar que aparezcan mensajes NBIRTH al inicio (estructura de datos)
+* Confirmar flujo continuo de mensajes NDATA (datos en tiempo real)
+* Monitorear mensajes NDEATH en caso de desconexión
+
+*Análisis de Payloads*:
+
+* Los payloads aparecen en formato binario (Protocol Buffers)
+* MQTT Explorer puede mostrar información básica del mensaje
+* Para análisis detallado del contenido, utilizar decodificadores Sparkplug B específicos
+
+=== Gestión de Conexiones
+
+*Reconexión Automática*:
+
+* Ignition maneja automáticamente las reconexiones al broker
+* Verificar configuración de *Keep Alive* para detección oportuna de desconexiones
+* Monitorear logs para identificar patrones de desconexión
+
+*Calidad de Servicio (QoS)*:
+
+* Por defecto, Sparkplug B utiliza QoS 0 para datos en tiempo real
+* Los mensajes de control (BIRTH/DEATH) utilizan QoS 1 para garantizar entrega
+* No modificar estos valores sin justificación técnica
+
+=== Mantenimiento Preventivo de OPC y MQTT
+
+*Revisión Periódica*:
+
+* Revisar logs para identificar errores recurrentes
+* Monitorear el crecimiento del History Store local
+* Revisar periódicamente el estado de conexión
+* Ya que no es posible acceder fácilmente a métricas de envío de mensajes y datos, es necesario revisar periódicamente la calidad de los datos enviados. Esto se puede hacer verificando los tags directamente o haciendo uso de herramientas como MQTT Explorer
+
+*Limpieza de Datos*:
+
+* Establecer que tags son conservados por el store and forward, desde la propiedad de tag "StoreAndForward"
+* Monitorear espacio en disco utilizado por Store and Forward
+
+== Consideraciones de Sparkplug B
+
+=== Formato de Mensajes
+
+Los mensajes publicados utilizan formato *Sparkplug B*:
+
+* *Serialización*: Protocol Buffers (binario, no legible directamente)
+* *Estructura*: Incluye metadatos, timestamps y calidad de datos
+* *Topics*: Siguen convención `spBv1.0/GroupID/NDATA/EdgeNodeID`
+
+=== Gestión de Estado
+
+Sparkplug B incluye mensajes de control de estado:
+
+* *NBIRTH*: Declaración de estructura de datos del nodo
+* *NDATA*: Datos en tiempo real
+* *NDEATH*: Notificación de desconexión del nodo
+
+== Extensión de la Configuración
+
+=== Agregar Nuevos Tags
+
+Para publicar variables adicionales:
+
+. Añadir tags al Tag Provider `CEM_UNS` bajo la ruta `Cempro/San Miguel`
+. Los cambios se reflejan automáticamente en las publicaciones MQTT
+. Verificar que aparezcan en el broker de destino
+
+=== Múltiples Transmitters
+
+Para publicar con más de un Transmitter:
+
+. Crear nuevo Transmitter siguiendo el mismo procedimiento, preferiblemente iniciar desmarcando "Enabled"
+. Asegurar que el par Group ID y Edge Node ID únicos, en este caso Cempro/San Miguel y Cempro/San Gabriel son válidos al ser combinaciones únicas.
+. Asociar a Set y servidor MQTT correspondientes
